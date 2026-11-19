@@ -1,6 +1,8 @@
 
+import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 
 function Icon({ name }: { name: "bell" | "search" | "arrow" | "level" | "clock" | "file" }) {
   const paths = {
@@ -35,7 +37,19 @@ export default function Home() {
         </nav>
         <div className="home-account">
           <button type="button" aria-label="Notifications" className="notification-button"><Icon name="bell" /></button>
-          <Image src="/vertex-avatar.png" width={52} height={52} alt="Your profile" className="profile-avatar" />
+          <Suspense>
+            <Show when="signed-out">
+              <SignInButton>
+                <button type="button" className="auth-sign-in">Sign in</button>
+              </SignInButton>
+              <SignUpButton>
+                <button type="button" className="auth-sign-up">Sign up</button>
+              </SignUpButton>
+            </Show>
+            <Show when="signed-in">
+              <UserButton />
+            </Show>
+          </Suspense>
         </div>
       </header>
 
